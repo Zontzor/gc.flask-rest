@@ -72,10 +72,10 @@ def get_user(user_id):
 
 @app.route('/glucose_coach/api/v1.0/users', methods=['POST'])
 def create_user():
-    username = request.get_json()["username"]
-    password = request.get_json()["password"]
-    email = request.get_json()["email"]
-    firstname = request.get_json()["firstname"]
+    username = request.get_json()['username']
+    password = request.get_json()['password']
+    email = request.get_json()['email']
+    firstname = request.get_json()['firstname']
     
     user = Users(username = username, password = password, email = email, firstname = firstname)
     
@@ -89,16 +89,30 @@ def create_user():
     
     return jsonify(user.serialize())
     
-@app.route('/glucose_coach/api/v1.0/users/<int:user_id>', methods=['PATCH']) 
+@app.route('/glucose_coach/api/v1.0/users/<int:user_id>', methods=['PUT']) 
 def update_user(user_id):
     user = Users.query.filter_by(id=user_id).first() #fetch the product do be updated
     
-    password = request.get_json()["password"]
-
     curr_session = db.session 
     try:
-        user.password = password #update the column rate with the info fetched from the request
-        curr_session.commit() #commit changes
+        if 'username' in request.json:
+            user.username = request.get_json()['username'] 
+        if 'password' in request.json:
+            user.password = request.get_json()['password'] 
+        if 'email' in request.json:
+            user.email = request.get_json()['email'] 
+        if 'firstname' in request.json:
+            user.firstname = request.get_json()['firstname'] 
+        if 'weight' in request.json:
+            user.weight = request.get_json()['weight']
+        if 'height' in request.json:
+            user.username = request.get_json()['height']
+        if 'date_created' in request.json:
+            user.date_created = request.get_json()['date_created']
+        if 'profile_image_path' in request.json:
+            user.profile_image_path = request.get_json()['profile_image_path']
+        
+        curr_session.commit()
     except:
         curr_session.rollback()
         curr_session.flush()
@@ -121,4 +135,4 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 500)
 
 if __name__ == "__main__":  
-    app.run(debug = True)
+    app.run(host="0.0.0.0", port=5000, debug = True)

@@ -11,4 +11,4 @@ curl -i http://localhost:5000/glucose_coach/api/v1.0/users/1
 curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "password":"test9876", "email":"testio@test.com", "firstname":"Bob"}' http://localhost:5000/glucose_coach/api/v1.0/users
 
 -- Test user PATCH
-curl -i -H "Content-Type: application/json" -X PATCH -d '{"password":"sausage"}' http://localhost:5000/glucose_coach/api/v1.0/users/1
+curl -i -H "Content-Type: application/json" -X PUT -d '{"username":"Alig", "password":"yo"}' http://localhost:5000/glucose_coach/api/v1.0/users/1
