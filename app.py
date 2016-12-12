@@ -23,21 +23,6 @@ class Users(db.Model):
     date_created = db.Column('u_date_created', db.Date)
     profile_image_path = db.Column('u_profile_image_path', db.String(100))
     
-    # Users constructor
-    def __init__(self, id, username, password, email, firstname, weight, height, date_created, profile_image_path):
-        self.id = id
-        self.username = username
-        self.password = password
-        self.email = email
-        self.firstname = firstname
-        self.weight = weight
-        self.height = height
-        self.date_created = date_created
-        self.profile_image_path = profile_image_path
-        
-    def __repr__(self):
-        return '<Users (%s, %s) >' % (self.username, self.firstname)
-    
     def serialize(self):
         return {
             'id' : self.id,
@@ -82,8 +67,26 @@ def get_user(user_id):
     if user is None:
         abort(404)
         
-    result = user.serialize()
-    return jsonify(result)
+    return jsonify(user.serialize())
+
+@app.route('/glucose_coach/api/v1.0/users', methods=['POST'])
+def create_user():
+    username = request.get_json()["username"]
+    password = request.get_json()["password"]
+    email = request.get_json()["email"]
+    firstname = request.get_json()["firstname"]
+    
+    user = Users(username = username, password = password, email = email, firstname = firstname)
+    
+    curr_session = db.session #open database session
+    try:
+        curr_session.add(user) #add prepared statment to opened session
+        curr_session.commit() #commit changes
+    except:
+        curr_session.rollback()
+        curr_session.flush() 
+    
+    return jsonify(user.serialize())
     
 ##################
 # Blood glucose
