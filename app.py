@@ -1,6 +1,7 @@
 #!flask/bin/python
 from flask_sqlalchemy import SQLAlchemy  
 from flask import Flask, jsonify, request
+import werkzeug
 
 app = Flask(__name__)
 
@@ -30,10 +31,21 @@ class Users(db.Model):
     def __repr__(self):
         return '<Users (%s, %s) >' % (self.username, self.firstname)
 
+#############
+# Index
+############
 @app.route("/glucose_coach/api/v1.0/")
-def hello():  
-    return "Welcome to Glucose Coach API"
+def index():  
+    return """
+Available API endpoints:
+
+GET /users - List all users
+
+"""  
     
+#############
+# User
+############
 @app.route('/glucose_coach/api/v1.0/users', methods=['GET'])
 def get_users():
     data = Users.query.all() #fetch all users on the table
@@ -46,9 +58,20 @@ def get_users():
 @app.route('/glucose_coach/api/v1.0/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     user = Users.query.filter_by(id=user_id).first()
+    
+    if user is None:
+        abort(404)
+        
     result = [user.username, user.password, user.email, user.firstname]
     return jsonify(result)
-        
+    
+##################
+# Blood glucose
+##################
+
+#############
+# Error
+############
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
