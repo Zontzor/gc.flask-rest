@@ -1,5 +1,5 @@
 -- Test index GET
-http://localhost:5000/glucose_coach/api/v1.0
+curl -i http://localhost:5000/glucose_coach/api/v1.0
 
 -- Test users GET
 curl -i http://localhost:5000/glucose_coach/api/v1.0/users
@@ -9,3 +9,6 @@ curl -i http://localhost:5000/glucose_coach/api/v1.0/users/1
 
 -- Test user POST
 curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "password":"test9876", "email":"testio@test.com", "firstname":"Bob"}' http://localhost:5000/glucose_coach/api/v1.0/users
+
+-- Test user PATCH
+curl -i -H "Content-Type: application/json" -X PATCH -d '{"password":"sausage"}' http://localhost:5000/glucose_coach/api/v1.0/users/1

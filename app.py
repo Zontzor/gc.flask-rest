@@ -39,13 +39,14 @@ class Users(db.Model):
 #############
 # Index
 ############
-@app.route("/glucose_coach/api/v1.0/")
+@app.route("/glucose_coach/api/v1.0")
 def index():  
     return """
 Available API endpoints:
 
 GET /users - List all users
-
+GET /users/<user_id> - List a user
+POST /users - Add a user
 """  
     
 #############
@@ -86,6 +87,22 @@ def create_user():
         curr_session.rollback()
         curr_session.flush() 
     
+    return jsonify(user.serialize())
+    
+@app.route('/glucose_coach/api/v1.0/users/<int:user_id>', methods=['PATCH']) 
+def update_user(user_id):
+    user = Users.query.filter_by(id=user_id).first() #fetch the product do be updated
+    
+    password = request.get_json()["password"]
+
+    curr_session = db.session 
+    try:
+        user.password = password #update the column rate with the info fetched from the request
+        curr_session.commit() #commit changes
+    except:
+        curr_session.rollback()
+        curr_session.flush()
+
     return jsonify(user.serialize())
     
 ##################
