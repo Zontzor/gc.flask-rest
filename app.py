@@ -30,18 +30,32 @@ class Users(db.Model):
     def __repr__(self):
         return '<Users (%s, %s) >' % (self.username, self.firstname)
 
-@app.route("/")
+@app.route("/glucose_coach/api/v1.0/")
 def hello():  
     return "Welcome to Glucose Coach API"
     
-@app.route('/users', methods=['GET'])
+@app.route('/glucose_coach/api/v1.0/users', methods=['GET'])
 def get_users():
-    data = Users.query.all() #fetch all products on the table
+    data = Users.query.all() #fetch all users on the table
     data_all = []
     for user in data:
         data_all.append([user.id, user.username, user.email]) #prepare visual data
-
+    
     return jsonify(users=data_all)
+    
+@app.route('/glucose_coach/api/v1.0/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = Users.query.filter_by(id=user_id).first()
+    result = [user.username, user.password, user.email, user.firstname]
+    return jsonify(result)
+        
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+@app.errorhandler(500)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 500)
 
 if __name__ == "__main__":  
-    app.run()
+    app.run(debug = True)

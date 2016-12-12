@@ -1,0 +1,8 @@
+-- Test index
+http://localhost:5000/glucose_coach/api/v1.0
+
+-- Test users
+curl -i http://localhost:5000/glucose_coach/api/v1.0/users
+
+-- Test user id
+curl -i http://localhost:5000/glucose_coach/api/v1.0/users/1
