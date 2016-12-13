@@ -18,7 +18,7 @@ class Users(db.Model):
     password = db.Column('u_password', db.String(30))
     email = db.Column('u_email', db.String(30))
     firstname = db.Column('u_firstname', db.String(30))
-    weight = db.Column('u_weight', db.Integer)
+    weight = db.Column('u_weight', db.Float)
     height = db.Column('u_height', db.Integer)
     date_created = db.Column('u_date_created', db.Date)
     profile_image_path = db.Column('u_profile_image_path', db.String(100))
@@ -47,6 +47,7 @@ Available API endpoints:
 GET /users - List all users
 GET /users/<user_id> - List a user
 POST /users - Add a user
+PUT /users - Update a users info
 """  
     
 #############
@@ -118,6 +119,15 @@ def update_user(user_id):
         curr_session.flush()
 
     return jsonify(user.serialize())
+    
+@app.route('/glucose_coach/api/v1.0/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    curr_session = db.session
+
+    Users.query.filter_by(id=user_id).delete() 
+    curr_session.commit()
+
+    return jsonify({'result': True}) 
     
 ##################
 # Blood glucose
