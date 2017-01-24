@@ -2,6 +2,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, jsonify, request, abort, make_response
 
+#import dateutil.parser
+
 app = Flask(__name__)
 
 # MySQL configurations
@@ -61,9 +63,12 @@ def index():
 Available API endpoints:
 
 GET /users - List all users
-GET /users/<user_id> - List a user
+GET /users/<username> - List a user
 POST /users - Add a user
 PUT /users - Update a users info
+DELETE /users/<username> - Delete a user
+
+GET /users/<username>/bgreadings - Get a users blood glucose results
 """  
     
 #############
@@ -152,7 +157,7 @@ def delete_user(user_id):
 ##################
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', 
 methods=['GET'])
-def get_user_bgreading(user_name):
+def get_user_bgreadings(user_name):
     user = Users.query.filter_by(username=user_name).first()
     data = BGReadings.query.filter_by(username=user_name).all()
     data_all = []
@@ -164,6 +169,25 @@ def get_user_bgreading(user_name):
         abort(404)
         
     return jsonify(bgreadings=data_all)
+
+"""@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<string:datestamp>', 
+methods=['GET'])
+def get_user_bgreadings_day(user_name, datestamp):
+    user = Users.query.filter_by(username=user_name).first()
+    data = BGReadings.query.filter_by(username=user_name).all()
+    data_all = []
+    
+    # Parse date from each bg reading and match to users requested date
+    for bgreading in data:
+        date = dateutil.parser.parse(str(bgreading.bg_timestamp)).date()
+        if (datestamp == str(date)):
+            data_all.append(bgreading.serialize()) 
+    
+    if user is None:
+        abort(404)
+        
+    return jsonify(bgreadings=data_all)"""
+
 
 #############
 # Error

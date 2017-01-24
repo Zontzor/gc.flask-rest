@@ -1,11 +1,14 @@
 -- Test index GET
 curl -i http://localhost:5000/glucose_coach/api/v1.0
 
+##########
+# USER
+##########
 -- Test users GET
 curl -i http://localhost:5000/glucose_coach/api/v1.0/users
 
 -- Test username GET
-curl -i http://localhost:5000/glucose_coach/api/v1.0/users/<user_name>
+curl -i http://localhost:5000/glucose_coach/api/v1.0/users/<username>
 
 -- Test user POST
 curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "password":"test9876", "email":"testio@test.com", "firstname":"Bob"}' http://localhost:5000/glucose_coach/api/v1.0/users
@@ -16,5 +19,11 @@ curl -i -H "Content-Type: application/json" -X PUT -d '{"username":"Alig", "pass
 -- Test user DELETE
 curl -X DELETE http://localhost:5000/glucose_coach/api/v1.0/users/<username>
 
+##########
+# BGREADINGS
+##########
 -- Test user bgreadings GET
 -- curl -i http://localhost:5000/glucose_coach/api/v1.0/users/Neutr0n/bgreadings
+
+-- Test user bgreadings for specific time GET
+curl -i http://localhost:5000/glucose_coach/api/v1.0/users/Neutr0n/bgreadings/2016-01-02T13:00:00Z
