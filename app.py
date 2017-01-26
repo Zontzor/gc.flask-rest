@@ -171,7 +171,32 @@ def get_user_bgreadings(user_name):
         abort(404)
         
     return jsonify(bgreadings=data_all)
-
+    
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', 
+methods=['POST'])
+def add_bg(user_name):
+    username = request.get_json()['username']
+    bg_value = request.get_json()['bg_value']
+    bg_timestamp = request.get_json()['bg_timestamp']
+    
+    bg_reading = BGReadings(username = username, bg_value = bg_value, 
+    bg_timestamp = bg_timestamp)
+    
+    user = Users.query.filter_by(username=user_name).first()
+    
+    if user is None:
+        abort(404)
+    
+    curr_session = db.session #open database session
+    try:
+        curr_session.add(bg_reading) #add prepared statment to opened session
+        curr_session.commit() #commit changes
+    except:
+        curr_session.rollback()
+        curr_session.flush() 
+        print("Add bgreading error")
+    
+    return jsonify(bg_reading.serialize())
 
 """@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<string:datestamp>', 
 methods=['GET'])
