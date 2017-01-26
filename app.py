@@ -69,6 +69,7 @@ PUT /users - Update a users info
 DELETE /users/<username> - Delete a user
 
 GET /users/<username>/bgreadings - Get a users blood glucose results
+POST /users/<username>/bgreadings - Add a user blood glucose result
 """  
     
 #############
@@ -109,12 +110,13 @@ def create_user():
     except:
         curr_session.rollback()
         curr_session.flush() 
+        print("Add user error")
     
     return jsonify(user.serialize())
     
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', methods=['PUT']) 
-def update_user(user_id):
-    user = Users.query.filter_by(id=user_id).first()
+def update_user(user_name):
+    user = Users.query.filter_by(username=user_name).first()
     
     curr_session = db.session 
     try:
@@ -144,10 +146,10 @@ def update_user(user_id):
     
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', 
 methods=['DELETE'])
-def delete_user(user_id):
+def delete_user(user_name):
     curr_session = db.session
 
-    Users.query.filter_by(id=user_id).delete() 
+    Users.query.filter_by(username=user_name).delete() 
     curr_session.commit()
 
     return jsonify({'result': True}) 
@@ -169,6 +171,7 @@ def get_user_bgreadings(user_name):
         abort(404)
         
     return jsonify(bgreadings=data_all)
+
 
 """@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<string:datestamp>', 
 methods=['GET'])
