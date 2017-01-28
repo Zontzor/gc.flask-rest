@@ -13,4 +13,5 @@ DELETE /users/<username> - Delete a user (Not available atm)
 
 GET /users/<username>/bgreadings - Get a users blood glucose results
 POST /users/<username>/bgreadings - Add a user blood glucose result
+PUT /users/<username>/bgreadings/<bg_id> - Alter a users bg reading
 """ 
