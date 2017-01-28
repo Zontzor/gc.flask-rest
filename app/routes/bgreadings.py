@@ -5,7 +5,7 @@ from ..resources.bgreading import BGReading
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', 
 methods=['GET'])
-def get_user_bgreadings(user_name):
+def read_all_bgs(user_name):
     user = User.query.filter_by(username=user_name).first()
     
     if user is None:
@@ -19,9 +19,24 @@ def get_user_bgreadings(user_name):
         
     return jsonify(bgreadings=data_all)
     
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<int:bg_id>', 
+methods=['GET'])
+def read_bgs(user_name, bg_id):
+    user = User.query.filter_by(username=user_name).first()
+    
+    if user is None:
+        abort(404)
+        
+    bg_reading = BGReading.query.filter_by(id=bg_id).first()
+    
+    if bg_reading is None:
+        abort(404)
+
+    return jsonify(bg_reading.serialize())
+    
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', 
 methods=['POST'])
-def add_bg(user_name):
+def create_bg(user_name):
     username = request.get_json()['username']
     bg_value = request.get_json()['bg_value']
     bg_timestamp = request.get_json()['bg_timestamp']
@@ -44,21 +59,30 @@ def add_bg(user_name):
         print("Add bgreading error")
     
     return jsonify(bg_reading.serialize())
-
-"""@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<string:datestamp>', 
-methods=['GET'])
-def get_user_bgreadings_day(user_name, datestamp):
-    user = User.query.filter_by(username=user_name).first()
-    data = BGReading.query.filter_by(username=user_name).all()
-    data_all = []
     
-    # Parse date from each bg reading and match to users requested date
-    for bgreading in data:
-        date = dateutil.parser.parse(str(bgreading.bg_timestamp)).date()
-        if (datestamp == str(date)):
-            data_all.append(bgreading.serialize()) 
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<int:bg_id>', 
+methods=['PUT'])
+def update_bg(user_name, bg_id):
+    user = User.query.filter_by(username=user_name).first()
     
     if user is None:
         abort(404)
         
-    return jsonify(bgreadings=data_all)"""
+    bg_reading = BGReading.query.filter_by(id=bg_id).first()
+    
+    if bg_reading is None:
+        abort(404)
+    
+    curr_session = db.session 
+    try:
+        if 'bg_value' in request.json:
+            bg_reading.bg_value = request.get_json()['bg_value'] 
+        if 'bg_timestamp' in request.json:
+            bg_reading.bg_timestamp = request.get_json()['bg_timestamp']
+        
+        curr_session.commit()
+    except:
+        curr_session.rollback()
+        curr_session.flush()
+
+    return jsonify(bg_reading.serialize())

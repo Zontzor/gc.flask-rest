@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request, abort, make_response
 from ..resources.user import User
 
 @app.route('/glucose_coach/api/v1.0/users', methods=['GET'])
-def get_users():
+def read_users():
     data = User.query.all() #fetch all users on the table
     data_all = []
     for user in data:
@@ -12,7 +12,7 @@ def get_users():
     return jsonify(users=data_all)
     
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', methods=['GET'])
-def get_user(user_name):
+def read_user(user_name):
     user = User.query.filter_by(username=user_name).first()
     
     if user is None:
