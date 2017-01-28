@@ -1,5 +1,5 @@
-from app import app
-from flask import jsonify 
+from app import app, db
+from flask import Flask, jsonify, request, abort, make_response 
 from ..resources.user import User
 from ..resources.bgreading import BGReading
 
@@ -7,14 +7,15 @@ from ..resources.bgreading import BGReading
 methods=['GET'])
 def get_user_bgreadings(user_name):
     user = User.query.filter_by(username=user_name).first()
-    data = BGReading.query.filter_by(username=user_name).all()
+    
+    if user is None:
+        abort(404)
+        
+    data = BGReading.query.filter_by(user_id=user.id).all()
     data_all = []
     
     for bgreading in data:
         data_all.append(bgreading.serialize()) 
-    
-    if user is None:
-        abort(404)
         
     return jsonify(bgreadings=data_all)
     
@@ -25,13 +26,13 @@ def add_bg(user_name):
     bg_value = request.get_json()['bg_value']
     bg_timestamp = request.get_json()['bg_timestamp']
     
-    bg_reading = BGReading(username = username, bg_value = bg_value, 
-    bg_timestamp = bg_timestamp)
-    
     user = User.query.filter_by(username=user_name).first()
     
     if user is None:
         abort(404)
+    
+    bg_reading = BGReading(user_id = user.id, bg_value = bg_value, 
+    bg_timestamp = bg_timestamp)
     
     curr_session = db.session #open database session
     try:
