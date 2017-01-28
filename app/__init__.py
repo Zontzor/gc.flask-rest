@@ -14,45 +14,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # Instantiate db object
 db = SQLAlchemy(app)
 
-class Users(db.Model):
-    __tablename__ = 'users'
-    id = db.Column('id', db.Integer, primary_key=True)
-    username = db.Column('u_username', db.String(30))
-    password = db.Column('u_password', db.String(30))
-    email = db.Column('u_email', db.String(30))
-    firstname = db.Column('u_firstname', db.String(30))
-    weight = db.Column('u_weight', db.Float)
-    height = db.Column('u_height', db.Integer)
-    date_created = db.Column('u_date_created', db.Date)
-    profile_image_path = db.Column('u_profile_image_path', db.String(100))
-    
-    def serialize(self):
-        return {
-            'id' : self.id,
-            'username' : self.username,
-            'password' : self.password,
-            'email' : self.email,
-            'firstname' : self.firstname,
-            'weight' : self.weight,
-            'height' : self.height,
-            'date_created' : self.date_created,
-            'profile_image_path' : self.profile_image_path
-        }
-        
-class BGReadings(db.Model):
-    __tablename__ = 'bg_readings'
-    id = db.Column('id', db.Integer, primary_key=True)
-    username = db.Column('username', db.String(30))
-    bg_value = db.Column('bg_value', db.Float)
-    bg_timestamp = db.Column('bg_timestamp', db.DateTime)
-    
-    def serialize(self):
-        return {
-            'id' : self.id,
-            'username' : self.username,
-            'bg_value' : self.bg_value,
-            'bg_timestamp' : self.bg_timestamp
-        }
+from resources.user import User
+from resources.bgreading import BGReading
 
 #############
 # Index
@@ -77,7 +40,7 @@ POST /users/<username>/bgreadings - Add a user blood glucose result
 ############
 @app.route('/glucose_coach/api/v1.0/users', methods=['GET'])
 def get_users():
-    data = Users.query.all() #fetch all users on the table
+    data = User.query.all() #fetch all users on the table
     data_all = []
     for user in data:
         data_all.append(user.serialize()) #prepare visual data
@@ -86,7 +49,7 @@ def get_users():
     
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', methods=['GET'])
 def get_user(user_name):
-    user = Users.query.filter_by(username=user_name).first()
+    user = User.query.filter_by(username=user_name).first()
     
     if user is None:
         abort(404)
@@ -100,7 +63,7 @@ def create_user():
     email = request.get_json()['email']
     firstname = request.get_json()['firstname']
     
-    user = Users(username = username, password = password, email = email, 
+    user = User(username = username, password = password, email = email, 
     firstname = firstname)
     
     curr_session = db.session #open database session
@@ -116,7 +79,7 @@ def create_user():
     
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', methods=['PUT']) 
 def update_user(user_name):
-    user = Users.query.filter_by(username=user_name).first()
+    user = User.query.filter_by(username=user_name).first()
     
     curr_session = db.session 
     try:
@@ -149,7 +112,7 @@ methods=['DELETE'])
 def delete_user(user_name):
     curr_session = db.session
 
-    Users.query.filter_by(username=user_name).delete() 
+    User.query.filter_by(username=user_name).delete() 
     curr_session.commit()
 
     return jsonify({'result': True}) 
@@ -160,8 +123,8 @@ def delete_user(user_name):
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', 
 methods=['GET'])
 def get_user_bgreadings(user_name):
-    user = Users.query.filter_by(username=user_name).first()
-    data = BGReadings.query.filter_by(username=user_name).all()
+    user = User.query.filter_by(username=user_name).first()
+    data = BGReading.query.filter_by(username=user_name).all()
     data_all = []
     
     for bgreading in data:
@@ -179,10 +142,10 @@ def add_bg(user_name):
     bg_value = request.get_json()['bg_value']
     bg_timestamp = request.get_json()['bg_timestamp']
     
-    bg_reading = BGReadings(username = username, bg_value = bg_value, 
+    bg_reading = BGReading(username = username, bg_value = bg_value, 
     bg_timestamp = bg_timestamp)
     
-    user = Users.query.filter_by(username=user_name).first()
+    user = User.query.filter_by(username=user_name).first()
     
     if user is None:
         abort(404)
@@ -201,8 +164,8 @@ def add_bg(user_name):
 """@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<string:datestamp>', 
 methods=['GET'])
 def get_user_bgreadings_day(user_name, datestamp):
-    user = Users.query.filter_by(username=user_name).first()
-    data = BGReadings.query.filter_by(username=user_name).all()
+    user = User.query.filter_by(username=user_name).first()
+    data = BGReading.query.filter_by(username=user_name).all()
     data_all = []
     
     # Parse date from each bg reading and match to users requested date
@@ -227,6 +190,3 @@ def not_found(error):
 @app.errorhandler(500)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 500)
-
-if __name__ == "__main__":  
-    app.run(host="0.0.0.0", port=5000)
