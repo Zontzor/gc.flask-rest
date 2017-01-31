@@ -16,6 +16,7 @@ db = SQLAlchemy(app)
 
 from resources.user import User
 from resources.bgreading import BGReading
+from resources.insdosage import InsDosage
     
 #############
 # Routes
@@ -23,4 +24,5 @@ from resources.bgreading import BGReading
 import routes.index
 import routes.users
 import routes.bgreadings
+import routes.insdosages
 import routes.errors

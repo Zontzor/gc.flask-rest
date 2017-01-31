@@ -37,4 +37,17 @@ curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "bg_
 -- Test user bgreadings specific PUT
 curl -i -H "Content-Type: application/json" -X PUT -d '{"bg_value":9.5}' http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings/<bg_id>
 
+##########
+# INSULIN
+##########
+-- Test user insdosage GET
+curl -i http://localhost:5000/glucose_coach/api/v1.0/users/Test/insdosages
 
+-- Test user insdosage specific GET
+curl -i http://localhost:5000/glucose_coach/api/v1.0/users/Test/insdosages/<ins_id>
+
+-- Test user insdosage POST
+curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "ins_type":"Novorapid", "ins_value":6, "ins_timestamp":"2016-01-02 13:00:00"}' http://localhost:5000/glucose_coach/api/v1.0/users/Test/insdosages
+
+-- Test user insdosage specific PUT
+curl -i -H "Content-Type: application/json" -X PUT -d '{"ins_value":2}' http://localhost:5000/glucose_coach/api/v1.0/users/Test/insdosages/<ins_id>
