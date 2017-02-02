@@ -1,4 +1,7 @@
-from app import db
+from app import app, db
+from passlib.apps import custom_app_context as pwd_context
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                          as Serializer, BadSignature, SignatureExpired)
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -11,7 +14,15 @@ class User(db.Model):
     height = db.Column('u_height', db.Integer)
     date_created = db.Column('u_date_created', db.Date)
     profile_image_path = db.Column('u_profile_image_path', db.String(100))
+    password_hash = db.Column('u_password_hash', db.String(128))
     
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
+        print(self.password_hash)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
+
     def serialize(self):
         return {
             'id' : self.id,
@@ -22,5 +33,6 @@ class User(db.Model):
             'weight' : self.weight,
             'height' : self.height,
             'date_created' : self.date_created,
-            'profile_image_path' : self.profile_image_path
+            'profile_image_path' : self.profile_image_path,
+            'password_hash' : self.password_hash,
         }

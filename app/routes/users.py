@@ -1,4 +1,4 @@
-from app import app, db
+from app import app, db, auth
 from flask import Flask, jsonify, request, abort, make_response 
 from ..resources.user import User
 
@@ -12,6 +12,7 @@ def read_users():
     return jsonify(users=data_all)
     
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', methods=['GET'])
+@auth.login_required
 def read_user(user_name):
     user = User.query.filter_by(username=user_name).first()
     
@@ -27,11 +28,15 @@ def create_user():
     email = request.get_json()['email']
     firstname = request.get_json()['firstname']
     
+    if username is None or password is None:
+        abort(400) # missing arguments
+    if User.query.filter_by(username = username).first() is not None:
+        abort(400) # existing user
+        
     user = User(username = username, password = password, email = email, 
-    firstname = firstname)
-    
-    if user is None:
-        abort(404)
+        firstname = firstname)
+        
+    user.hash_password(password)
     
     curr_session = db.session #open database session
     try:
@@ -40,7 +45,7 @@ def create_user():
     except:
         curr_session.rollback()
         curr_session.flush() 
-        print("Add user error")
+        abort(400)
     
     return jsonify(user.serialize())
     
