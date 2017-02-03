@@ -32,4 +32,3 @@ import routes.users
 import routes.bgreadings
 import routes.insdosages
 import routes.errors
-import routes.token

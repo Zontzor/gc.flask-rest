@@ -7,18 +7,16 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column('id', db.Integer, primary_key=True)
     username = db.Column('u_username', db.String(30))
-    password = db.Column('u_password', db.String(30))
+    password_hash = db.Column('u_password_hash', db.String(256))
     email = db.Column('u_email', db.String(30))
     firstname = db.Column('u_firstname', db.String(30))
     weight = db.Column('u_weight', db.Float)
     height = db.Column('u_height', db.Integer)
     date_created = db.Column('u_date_created', db.Date)
     profile_image_path = db.Column('u_profile_image_path', db.String(100))
-    password_hash = db.Column('u_password_hash', db.String(128))
     
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
-        print(self.password_hash)
 
     def verify_password(self, password):
         return pwd_context.verify(password, self.password_hash)
@@ -27,7 +25,6 @@ class User(db.Model):
         return {
             'id' : self.id,
             'username' : self.username,
-            'password' : self.password,
             'email' : self.email,
             'firstname' : self.firstname,
             'weight' : self.weight,

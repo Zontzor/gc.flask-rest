@@ -33,10 +33,11 @@ def create_user():
     if User.query.filter_by(username = username).first() is not None:
         abort(400) # existing user
         
-    user = User(username = username, password = password, email = email, 
-        firstname = firstname)
+    user = User(username = username, email = email, firstname = firstname)
         
     user.hash_password(password)
+    
+    print(user.username + ', ' + user.password_hash + ', ' + user.email + ', ' + user.firstname)
     
     curr_session = db.session #open database session
     try:
@@ -61,7 +62,7 @@ def update_user(user_name):
         if 'username' in request.json:
             user.username = request.get_json()['username'] 
         if 'password' in request.json:
-            user.password = request.get_json()['password'] 
+            user.hash_password(request.get_json()['username'])
         if 'email' in request.json:
             user.email = request.get_json()['email'] 
         if 'firstname' in request.json:
