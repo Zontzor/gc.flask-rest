@@ -31,4 +31,5 @@ import routes.index
 import routes.users
 import routes.bgreadings
 import routes.insdosages
+import routes.token
 import routes.errors

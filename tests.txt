@@ -16,8 +16,11 @@ curl -u Test:test9876 -i http://localhost:5000/glucose_coach/api/v1.0/users/Test
 3. Test user PUT
 curl -u Test:test9876 -i -H "Content-Type: application/json" -X PUT -d '{"username":"alex"}' http://localhost:5000/glucose_coach/api/v1.0/users/Test
 
--- Authentication
-curl -u Test:yo -i http://localhost:5000/glucose_coach/api/v1.0/token
+4. Test authentication token
+curl -u Test:test9876 -i http://localhost:5000/glucose_coach/api/v1.0/token
+
+4.1 Test token GET
+curl -u <token>:blank -i http://localhost:5000/glucose_coach/api/v1.0/users/Test
 
 ##########
 # BGREADINGS
