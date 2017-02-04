@@ -3,11 +3,12 @@ from flask import Flask, jsonify, request, abort, make_response
 from ..resources.user import User
 
 @app.route('/glucose_coach/api/v1.0/users', methods=['GET'])
+@auth.login_required
 def read_users():
-    data = User.query.all() #fetch all users on the table
+    data = User.query.all() # fetch all users on the table
     data_all = []
     for user in data:
-        data_all.append(user.serialize()) #prepare visual data
+        data_all.append(user.serialize()) # prepare visual data
     
     return jsonify(users=data_all)
     
@@ -51,6 +52,7 @@ def create_user():
     return jsonify(user.serialize())
     
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', methods=['PUT']) 
+@auth.login_required
 def update_user(user_name):
     user = User.query.filter_by(username=user_name).first()
     
@@ -62,7 +64,7 @@ def update_user(user_name):
         if 'username' in request.json:
             user.username = request.get_json()['username'] 
         if 'password' in request.json:
-            user.hash_password(request.get_json()['username'])
+            user.hash_password(request.get_json()['password'])
         if 'email' in request.json:
             user.email = request.get_json()['email'] 
         if 'firstname' in request.json:
@@ -78,25 +80,8 @@ def update_user(user_name):
         
         curr_session.commit()
     except:
+        print("Error")
         curr_session.rollback()
         curr_session.flush()
 
     return jsonify(user.serialize())
-    
-"""
- 28/1/17 - Not using for the moment as there are dependencies on users
-
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>', 
-methods=['DELETE'])
-def delete_user(user_name):
-    curr_session = db.session
-    
-    user = User.query.filter_by(username=user_name).first()
-    if user is None:
-        abort(404)
-
-    User.query.filter_by(username="Test").delete() 
-    
-    curr_session.commit()
-
-    return jsonify({'result': True}) """
