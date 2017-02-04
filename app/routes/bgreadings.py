@@ -1,10 +1,10 @@
-from app import app, db
+from app import app, db, auth
 from flask import Flask, jsonify, request, abort, make_response 
 from ..resources.user import User
 from ..resources.bgreading import BGReading
 
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', 
-methods=['GET'])
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', methods=['GET'])
+@auth.login_required
 def read_all_bgs(user_name):
     user = User.query.filter_by(username=user_name).first()
     
@@ -19,8 +19,8 @@ def read_all_bgs(user_name):
         
     return jsonify(bgreadings=data_all)
     
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<int:bg_id>', 
-methods=['GET'])
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<int:bg_id>', methods=['GET'])
+@auth.login_required
 def read_bgs(user_name, bg_id):
     user = User.query.filter_by(username=user_name).first()
     
@@ -34,8 +34,8 @@ def read_bgs(user_name, bg_id):
 
     return jsonify(bg_reading.serialize())
     
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', 
-methods=['POST'])
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', methods=['POST'])
+@auth.login_required
 def create_bg(user_name):
     username = request.get_json()['username']
     bg_value = request.get_json()['bg_value']
@@ -60,8 +60,8 @@ def create_bg(user_name):
     
     return jsonify(bg_reading.serialize())
     
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<int:bg_id>', 
-methods=['PUT'])
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings/<int:bg_id>', methods=['PUT'])
+@auth.login_required
 def update_bg(user_name, bg_id):
     user = User.query.filter_by(username=user_name).first()
     

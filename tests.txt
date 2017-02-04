@@ -22,23 +22,20 @@ curl -u Test:test9876 -i http://localhost:5000/glucose_coach/api/v1.0/token
 4.1 Test token GET
 curl -u <token>:blank -i http://localhost:5000/glucose_coach/api/v1.0/users/Test
 
-##########
+##############
 # BGREADINGS
-##########
--- Test user bgreadings GET
-curl -i http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings
+##############
+1. Test user bgreadings POST
+curl -u Test:test9876 -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "bg_value":9.7, "bg_timestamp":"2016-01-02 13:00:00"}' http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings
 
--- Test user bgreadings specific GET
-curl -i http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings/<bg_id>
+2.1 Test user bgreadings GET
+curl -u Test:test9876 -i http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings
 
--- Test user bgreadings for specific time GET
-curl -i http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings/2016-01-02T13:00:00Z
+2.1 Test user bgreadings specific GET
+curl -u Test:test9876 -i http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings/<bg_id>
 
--- Test user bgreadings POST
-curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "bg_value":9.7, "bg_timestamp":"2016-01-02 13:00:00"}' http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings
-
--- Test user bgreadings specific PUT
-curl -i -H "Content-Type: application/json" -X PUT -d '{"bg_value":9.5}' http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings/<bg_id>
+3. Test user bgreadings specific PUT
+curl -u Test:test9876 -i -H "Content-Type: application/json" -X PUT -d '{"bg_value":9.5}' http://localhost:5000/glucose_coach/api/v1.0/users/Test/bgreadings/<bg_id>
 
 ##########
 # INSULIN
