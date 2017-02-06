@@ -1,4 +1,4 @@
-#!/home/alex/Coding/GlucoseCoach/rest-api/flask/bin/python
+#!/home/alex/Coding/GlucoseCoach/gc-rest-api/flask/bin/python
 
 import sys
 import getopt

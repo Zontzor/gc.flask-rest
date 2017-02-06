@@ -1,4 +1,4 @@
-#!/home/alex/Coding/GlucoseCoach/rest-api/flask/bin/python2
+#!/home/alex/Coding/GlucoseCoach/gc-rest-api/flask/bin/python2
 
 # -*- coding: utf-8 -*-
 import re
