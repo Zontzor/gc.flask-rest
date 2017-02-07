@@ -1,11 +1,14 @@
 -- Test index GET
 curl -i http://localhost:5000/glucose_coach/api/v1.0
 
+-- Test username GET
+curl -i http://localhost:5000/glucose_coach/api/v1.0/users/usernames/Test
+
 ##########
 # USER
 ##########
 1. Test user POST
-curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "password":"test9876", "email":"testio@test.com", "firstname":"Bob"}' http://localhost:5000/glucose_coach/api/v1.0/users
+curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Test", "password":"test9876", "email":"testio@test.com"}' http://localhost:5000/glucose_coach/api/v1.0/users
 
 2.1 Test users GET
 curl -u Test:test9876 -i http://localhost:5000/glucose_coach/api/v1.0/users

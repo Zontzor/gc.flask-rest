@@ -2,6 +2,15 @@ from app import app, db, auth
 from flask import Flask, jsonify, request, abort, make_response 
 from ..resources.user import User
 
+@app.route('/glucose_coach/api/v1.0/users/usernames/<string:user_name>', methods=['GET'])
+def read_username(user_name):
+    user = User.query.filter_by(username=user_name).first()
+    
+    if user is None:
+        abort(404)
+        
+    return jsonify(user.username)
+    
 @app.route('/glucose_coach/api/v1.0/users', methods=['GET'])
 @auth.login_required
 def read_users():
@@ -27,18 +36,15 @@ def create_user():
     username = request.get_json()['username']
     password = request.get_json()['password']
     email = request.get_json()['email']
-    firstname = request.get_json()['firstname']
     
     if username is None or password is None:
         abort(400) # missing arguments
     if User.query.filter_by(username = username).first() is not None:
         abort(400) # existing user
         
-    user = User(username = username, email = email, firstname = firstname)
+    user = User(username = username, email = email)
         
     user.hash_password(password)
-    
-    print(user.username + ', ' + user.password_hash + ', ' + user.email + ', ' + user.firstname)
     
     curr_session = db.session #open database session
     try:
