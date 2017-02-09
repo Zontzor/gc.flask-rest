@@ -37,7 +37,6 @@ def read_bgs(user_name, bg_id):
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', methods=['POST'])
 @auth.login_required
 def create_bg(user_name):
-    username = request.get_json()['username']
     bg_value = request.get_json()['bg_value']
     bg_timestamp = request.get_json()['bg_timestamp']
     
