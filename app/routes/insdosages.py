@@ -37,7 +37,6 @@ def read_ins(user_name, ins_id):
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages', 
 methods=['POST'])
 def create_ins(user_name):
-    username = request.get_json()['username']
     ins_type = request.get_json()['ins_type']
     ins_value = request.get_json()['ins_value']
     ins_timestamp = request.get_json()['ins_timestamp']
