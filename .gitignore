@@ -93,3 +93,6 @@ flask/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Config ignore
+config.py
