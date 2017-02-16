@@ -1,3 +1,7 @@
-from app import app
+import os.path
 
-app.run(host="0.0.0.0", port=5000)
+if os.path.exists('config.py'):
+    from app import app
+    app.run(host="0.0.0.0", port=5000)
+else:
+    print("No config file, exiting...")
