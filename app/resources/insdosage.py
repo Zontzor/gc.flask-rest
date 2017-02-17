@@ -1,13 +1,13 @@
 from app import db
 
 class InsDosage(db.Model):
-    __tablename__ = 'ins_dosages'
+    __tablename__ = 'insulin_logs'
     id = db.Column('id', db.Integer, primary_key=True)
     user_id = db.Column('user_id', db.Integer)
     ins_type = db.Column('ins_type', db.String(30))
     ins_value = db.Column('ins_value', db.Float)
     ins_timestamp = db.Column('ins_timestamp', db.DateTime)
-    
+
     def serialize(self):
         return {
             'id' : self.id,

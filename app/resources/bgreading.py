@@ -1,12 +1,12 @@
 from app import db
 
 class BGReading(db.Model):
-    __tablename__ = 'bg_readings'
+    __tablename__ = 'bg_logs'
     id = db.Column('id', db.Integer, primary_key=True)
     user_id = db.Column('user_id', db.Integer)
     bg_value = db.Column('bg_value', db.Float)
     bg_timestamp = db.Column('bg_timestamp', db.DateTime)
-    
+
     def serialize(self):
         return {
             'id' : self.id,
