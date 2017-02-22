@@ -1,6 +1,5 @@
 from app import app, db, auth
-from flask import Flask, jsonify, request, abort, make_response, g
-from ..resources.user import User
+from flask import jsonify, g
 
 @app.route('/glucose_coach/api/v1.0/token')
 @auth.login_required

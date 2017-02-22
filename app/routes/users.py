@@ -1,5 +1,5 @@
 from app import app, db, auth
-from flask import Flask, jsonify, request, abort, make_response
+from flask import jsonify, request, abort
 from ..resources.user import User
 import datetime
 

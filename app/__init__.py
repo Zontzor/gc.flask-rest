@@ -2,7 +2,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask_httpauth import HTTPBasicAuth
-import os.path
 
 app = Flask(__name__)
 

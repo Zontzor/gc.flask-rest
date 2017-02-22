@@ -1,5 +1,5 @@
 from app import app
-from flask import Flask, jsonify, request, abort, make_response 
+from flask import jsonify, make_response
 
 @app.errorhandler(404)
 def not_found(error):
