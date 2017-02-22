@@ -1,5 +1,5 @@
 from app import app, db
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from ..resources.user import User
 from ..resources.bgreading import BGReading
 import pandas as pd
@@ -25,11 +25,14 @@ def get_input_from_json(input_json):
         ]]
     )
 
-@app.route('/glucose_coach/api/v1.0/predict', methods=['POST'])
-def predict():
-    user_id = str(request.get_json()['userid'])
+@app.route('/glucose_coach/api/v1.0/predict/<string:user_name>', methods=['POST'])
+def predict(user_name):
+    user = User.query.filter_by(username=user_name).first()
 
-    model_file_name = model_directory + model_prefix + user_id + model_ext
+    if user is None:
+        abort(404)
+
+    model_file_name = model_directory + model_prefix + str(user.id) + model_ext
     clf = joblib.load(model_file_name)
 
     X = get_input_from_json(request.json)
@@ -38,9 +41,9 @@ def predict():
 
     return jsonify(predicition)
 
-@app.route('/glucose_coach/api/v1.0/train', methods=['POST'])
-def train():
-    user_id = str(request.get_json()['userid'])
+@app.route('/glucose_coach/api/v1.0/train/<string:user_name>', methods=['GET'])
+def train(user_name):
+    user = User.query.filter_by(username=user_name).first()
 
     # Split-out validation dataset
     array = dataset.values
@@ -56,7 +59,7 @@ def train():
     predictions = lr.predict(x_validation)
     print(predictions)
 
-    model_file_name = model_directory + model_prefix + user_id + model_ext
+    model_file_name = model_directory + model_prefix + str(user.id) + model_ext
     joblib.dump(lr, model_file_name)
 
     return 'Success'
