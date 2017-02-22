@@ -45,6 +45,11 @@ def predict(user_name):
 def train(user_name):
     user = User.query.filter_by(username=user_name).first()
 
+    if user is None:
+        abort(404)
+
+    bg_readings = BGReading.query.filter_by(user_id=user.id).all()
+
     # Split-out validation dataset
     array = dataset.values
     x = array[:, 0:4]
