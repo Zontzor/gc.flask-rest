@@ -13,14 +13,7 @@ db = SQLAlchemy(app)
 
 auth = HTTPBasicAuth()
 
-# MySQL configurations
-app.config.from_object('config')
-
 import callbacks.authentication
-
-from resources.user import User
-from resources.bgreading import BGReading
-from resources.insdosage import InsDosage
 
 #############
 # Routes
