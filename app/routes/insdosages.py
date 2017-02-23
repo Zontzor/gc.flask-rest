@@ -1,10 +1,10 @@
-from app import app, db
+from app import app, db, auth
 from flask import jsonify, request, abort
 from ..resources.user import User
 from ..resources.insdosage import InsDosage
 
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages', 
-methods=['GET'])
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages', methods=['GET'])
+@auth.login_required
 def read_all_ins(user_name):
     user = User.query.filter_by(username=user_name).first()
     
@@ -19,8 +19,8 @@ def read_all_ins(user_name):
         
     return jsonify(ins_dosages=data_all)
 
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages/<int:ins_id>', 
-methods=['GET'])
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages/<int:ins_id>', methods=['GET'])
+@auth.login_required
 def read_ins(user_name, ins_id):
     user = User.query.filter_by(username=user_name).first()
     
@@ -34,8 +34,8 @@ def read_ins(user_name, ins_id):
 
     return jsonify(ins_dosage.serialize())
     
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages', 
-methods=['POST'])
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages', methods=['POST'])
+@auth.login_required
 def create_ins(user_name):
     ins_type = request.get_json()['ins_type']
     ins_value = request.get_json()['ins_value']
@@ -60,8 +60,8 @@ def create_ins(user_name):
     
     return jsonify(ins_dosage.serialize())
     
-@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages/<int:ins_id>', 
-methods=['PUT'])
+@app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages/<int:ins_id>', methods=['PUT'])
+@auth.login_required
 def update_ins(user_name, ins_id):
     user = User.query.filter_by(username=user_name).first()
     
