@@ -31,6 +31,7 @@ import routes.bgreadings
 import routes.insdosages
 import routes.food_logs
 import routes.exercise_logs
+import routes.foods
 import routes.exercises
 import routes.predictions
 import routes.token
