@@ -2,6 +2,9 @@ from app import app, db
 from flask import Flask, request, jsonify, abort
 from ..resources.user import User
 from ..resources.bgreading import BGReading
+from ..resources.insdosage import InsDosage
+from ..resources.food_log import FoodLog
+from ..resources.exercise_log import ExerciseLog
 import pandas as pd
 import numpy as np
 from sklearn import model_selection
@@ -48,7 +51,10 @@ def train(user_name):
     if user is None:
         abort(404)
 
-    bg_readings = BGReading.query.filter_by(user_id=user.id).all()
+    bg_logs = BGReading.query.filter_by(user_id=user.id).limit(100)
+    insulin_logs = InsDosage.query.filter_by(user_id=user.id).limit(100)
+    food_logs = FoodLog.query.filter_by(user_id=user.id).limit(100)
+    exercise_logs = ExerciseLog.query.filter_by(user_id=user.id).limit(100)
 
     # Split-out validation dataset
     array = dataset.values
