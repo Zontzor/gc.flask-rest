@@ -55,16 +55,12 @@ def train(user_name):
     for prediction_fact in data:
         data_all.append(prediction_fact.fact_serialize())
 
-
-
     # Split-out validation dataset
-    array = pd.DataFrame(data_all)
-    array = array[['timestamp', 'bg_value', 'carbs', 'exercise', 'insulin_dosage']]
+    dataset = pd.DataFrame(data_all)
+    dataset = dataset[['timestamp', 'bg_value', 'carbs', 'exercise', 'insulin_dosage']]
 
-    array.to_csv("test.csv")
-
-    x = array[:,0:2]
-    y = array[:,4]
+    x = dataset.values[:,0:4]
+    y = dataset.values[:,4]
     validation_size = 0.20
     seed = 7
     x_train, x_validation, y_train, y_validation = model_selection.train_test_split(x, y, test_size=validation_size,
