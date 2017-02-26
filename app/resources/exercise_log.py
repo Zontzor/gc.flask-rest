@@ -7,7 +7,6 @@ class ExerciseLog(db.Model):
     user_id = db.Column('user_id', db.Integer)
     exercise_id = db.Column('exercise_id', db.Integer)
     el_duration = db.Column('el_duration', db.Integer)
-    el_intensity = db.Column('el_intensity', db.Integer)
     el_timestamp = db.Column('el_timestamp', db.DateTime)
 
     def serialize(self):
@@ -16,6 +15,5 @@ class ExerciseLog(db.Model):
             'user_id': self.user_id,
             'exercise_id': self.exercise_id,
             'el_duration': self.el_duration,
-            'el_intensity': self.el_intensity,
             'el_timestamp': self.el_timestamp,
         }
