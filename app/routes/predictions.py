@@ -51,10 +51,7 @@ def train(user_name):
     if user is None:
         abort(404)
 
-    bg_logs = BGReading.query.filter_by(user_id=user.id).limit(100)
-    insulin_logs = InsDosage.query.filter_by(user_id=user.id).limit(100)
-    food_logs = FoodLog.query.filter_by(user_id=user.id).limit(100)
-    exercise_logs = ExerciseLog.query.filter_by(user_id=user.id).limit(100)
+
 
     # Split-out validation dataset
     array = dataset.values
