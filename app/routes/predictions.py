@@ -49,7 +49,7 @@ def train(user_name):
     if user is None:
         abort(404)
 
-    data = PredictionFact.query.all()
+    data = PredictionFact.query.filter_by(user_id=user.id).all()
     data_all = []
 
     for prediction_fact in data:
