@@ -1,4 +1,5 @@
 from app import app, db
+import os.path
 from flask import Flask, request, jsonify, abort
 from ..resources.user import User
 from ..resources.prediction_fact import PredictionFact
@@ -33,13 +34,15 @@ def predict(user_name):
         abort(404)
 
     model_file_name = model_directory + model_prefix + str(user.id) + model_ext
+
+    if not os.path.exists(model_file_name):
+        model_file_name = model_directory + '/default_model' + model_ext
+
     clf = joblib.load(model_file_name)
 
     X = get_input_from_json(request.json)
 
-    predicition = clf.predict(X)[0]
-
-    return jsonify(predicition)
+    return jsonify(clf.predict(X)[0])
 
 
 @app.route('/glucose_coach/api/v1.0/train/<string:user_name>', methods=['GET'])
@@ -74,4 +77,4 @@ def train(user_name):
     model_file_name = model_directory + model_prefix + str(user.id) + model_ext
     joblib.dump(lr, model_file_name)
 
-    return jsonify(data_all)
+    return 'Success'
