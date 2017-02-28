@@ -8,11 +8,12 @@ class Fact(db.Model):
     user_id = db.Column('user_id', db.Integer, primary_key=True)
     bg_value = db.Column('bg_value', db.Float)
     ins_value = db.Column('ins_value', db.Float)
-    food_value = db.Column('food_value', db.Float)
-    exercise_value = db.Column('exercise_value', db.Float)
+    food_value = db.Column('food_value', db.Integer)
+    exercise_value = db.Column('exercise_value', db.Integer)
 
     def serialize(self):
         return {
+            'pf_date' : self.pf_time_of_day,
             'pf_time_of_day' : self.pf_time_of_day,
             'user_id' : self.user_id,
             'bg_value' : self.bg_value,

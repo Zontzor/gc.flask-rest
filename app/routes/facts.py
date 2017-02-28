@@ -5,7 +5,6 @@ from ..resources.fact import Fact
 
 
 @app.route('/glucose_coach/api/v1.0/facts/<string:user_name>', methods=['GET'])
-@auth.login_required
 def read_fact(user_name):
     user = User.query.filter_by(username=user_name).first()
 
@@ -14,4 +13,4 @@ def read_fact(user_name):
 
     fact = Fact.query.filter_by(user_id=user.id).first()
 
-    return jsonify(fact.fact_serialize())
+    return jsonify(fact.serialize())
