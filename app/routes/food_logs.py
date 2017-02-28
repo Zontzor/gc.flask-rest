@@ -37,7 +37,6 @@ def read_food_log(user_name, fl_id):
 
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/foodlogs', methods=['POST'])
-@auth.login_required
 def create_food_log(user_name):
     food_id = request.get_json()['food_id']
     fl_quantity = request.get_json()['fl_quantity']
