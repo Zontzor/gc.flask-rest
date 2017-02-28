@@ -1,7 +1,7 @@
 from app import db
 
 
-class PredictionFact(db.Model):
+class Fact(db.Model):
     __tablename__ = 'prediction_facts'
     pf_date = db.Column('pf_date', db.Date, primary_key=True)
     pf_time_of_day = db.Column('pf_time_of_day', db.Integer, primary_key=True)

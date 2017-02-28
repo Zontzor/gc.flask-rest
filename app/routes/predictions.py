@@ -2,7 +2,7 @@ from app import app, db
 import os.path
 from flask import Flask, request, jsonify, abort
 from ..resources.user import User
-from ..resources.prediction_fact import PredictionFact
+from ..resources.fact import Fact
 import numpy as np
 import pandas as pd
 from sklearn import model_selection
@@ -52,7 +52,7 @@ def train(user_name):
     if user is None:
         abort(404)
 
-    data = PredictionFact.query.filter_by(user_id=user.id).all()
+    data = Fact.query.filter_by(user_id=user.id).all()
     data_all = []
 
     for prediction_fact in data:

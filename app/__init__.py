@@ -26,7 +26,7 @@ import routes.food_logs
 import routes.exercise_logs
 import routes.foods
 import routes.exercises
-import routes.prediction_facts
+import routes.facts
 import routes.predictions
 import routes.token
 import routes.errors
