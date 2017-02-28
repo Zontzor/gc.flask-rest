@@ -37,7 +37,6 @@ def read_els(user_name, el_id):
 
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/exerciselogs', methods=['POST'])
-@auth.login_required
 def create_el(user_name):
     exercise_id = request.get_json()['exercise_id']
     el_duration = request.get_json()['el_duration']
