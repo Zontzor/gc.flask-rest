@@ -18,10 +18,10 @@ model_ext = '.pkl'
 def get_input_from_json(input_json):
     return np.array(
         [[
-            input_json['timestamp'],
+            input_json['pf_time_of_day'],
             input_json['bg_value'],
-            input_json['carbs'],
-            input_json['exercise']
+            input_json['food_value'],
+            input_json['exercise_value']
         ]]
     )
 
@@ -42,7 +42,9 @@ def predict(user_name):
 
     X = get_input_from_json(request.json)
 
-    return jsonify(clf.predict(X)[0])
+    insulin_prediction = round(clf.predict(X)[0] * 2) / 2
+
+    return jsonify(insulin_prediction)
 
 
 @app.route('/glucose_coach/api/v1.0/train/<string:user_name>', methods=['GET'])
@@ -60,7 +62,7 @@ def train(user_name):
 
     # Split-out validation dataset
     dataset = pd.DataFrame(data_all)
-    dataset = dataset[['timestamp', 'bg_value', 'carbs', 'exercise', 'insulin_dosage']]
+    dataset = dataset[['pf_time_of_day', 'bg_value', 'food_value', 'exercise_value', 'ins_value']]
 
     x = dataset.values[:,0:4]
     y = dataset.values[:,4]
