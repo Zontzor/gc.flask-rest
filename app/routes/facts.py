@@ -11,6 +11,6 @@ def read_fact(user_name):
     if user is None:
         abort(404)
 
-    fact = Fact.query.filter_by(user_id=user.id).first()
+    fact = Fact.query.filter_by(user_id=user.id).order_by(Fact.pf_date.desc(), Fact.pf_time_of_day.desc()).first()
 
     return jsonify(fact.serialize())
