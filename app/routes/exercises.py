@@ -3,6 +3,7 @@ from flask import jsonify, request, abort
 from ..resources.exercise import Exercise
 
 @app.route('/glucose_coach/api/v1.0/exercises', methods=['GET'])
+@auth.login_required
 def read_all_exercises():
     data = Exercise.query.all()
     data_all = []

@@ -1,4 +1,4 @@
-from app import app, db
+from app import app, db, auth
 import os.path
 from flask import Flask, request, jsonify, abort
 from ..resources.user import User
@@ -27,6 +27,7 @@ def get_input_from_json(input_json):
 
 
 @app.route('/glucose_coach/api/v1.0/predict/<string:user_name>', methods=['POST'])
+@auth.login_required
 def predict(user_name):
     user = User.query.filter_by(username=user_name).first()
 
@@ -48,6 +49,7 @@ def predict(user_name):
 
 
 @app.route('/glucose_coach/api/v1.0/train/<string:user_name>', methods=['GET'])
+@auth.login_required
 def train(user_name):
     user = User.query.filter_by(username=user_name).first()
 
