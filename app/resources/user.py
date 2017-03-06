@@ -14,7 +14,7 @@ class User(db.Model):
     height = db.Column('u_height', db.Integer)
     date_created = db.Column('u_date_created', db.Date)
     profile_image_path = db.Column('u_profile_image_path', db.String(100))
-    last_sync_date = db.Column('u_last_sync_date', db.Date)
+    last_sync_date = db.Column('u_last_sync_date', db.DateTime)
     
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -40,19 +40,19 @@ class User(db.Model):
 
     def serialize(self):
         return {
-            'id' : self.id,
-            'username' : self.username,
-            'email' : self.email,
-            'firstname' : self.firstname,
-            'weight' : self.weight,
-            'height' : self.height,
-            'date_created' : self.date_created,
-            'profile_image_path' : self.profile_image_path,
-            'password_hash' : self.password_hash,
-            'last_sync_date' : self.last_sync_date
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'firstname': self.firstname,
+            'weight': self.weight,
+            'height': self.height,
+            'date_created': self.date_created,
+            'profile_image_path': self.profile_image_path,
+            'password_hash': self.password_hash,
+            'last_sync_date': self.last_sync_date
         }
 
     def last_sync_serialize(self):
         return {
-            'last_sync_date': self.last_sync_date
+            'last_sync_date': self.last_sync_date.strftime("%Y-%m-%d %H:%M")
         }
