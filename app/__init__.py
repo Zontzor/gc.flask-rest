@@ -28,5 +28,6 @@ import routes.foods
 import routes.exercises
 import routes.facts
 import routes.predictions
+import routes.sync
 import routes.token
 import routes.errors
