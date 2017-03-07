@@ -17,7 +17,7 @@ def read_all_foodlogs(user_name):
     for food_log in data:
         data_all.append(food_log.serialize())
 
-    return jsonify(food_logs=data_all)
+    return jsonify(data_all)
 
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/foodlogs/<int:fl_id>', methods=['GET'])

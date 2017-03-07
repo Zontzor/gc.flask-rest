@@ -17,7 +17,7 @@ def read_all_ins(user_name):
     for ins_dosage in data:
         data_all.append(ins_dosage.serialize()) 
         
-    return jsonify(ins_dosages=data_all)
+    return jsonify(data_all)
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages/<int:ins_id>', methods=['GET'])
 @auth.login_required
