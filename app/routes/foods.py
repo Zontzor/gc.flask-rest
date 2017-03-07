@@ -11,4 +11,4 @@ def read_all_foods():
     for food in data:
         data_all.append(food.serialize())
 
-    return jsonify(foods=data_all)
+    return jsonify(data_all)
