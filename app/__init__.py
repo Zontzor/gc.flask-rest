@@ -20,8 +20,8 @@ import callbacks.authentication
 ############
 import routes.index
 import routes.users
-import routes.bgreadings
-import routes.insdosages
+import routes.bg_logs
+import routes.ins_logs
 import routes.food_logs
 import routes.exercise_logs
 import routes.foods

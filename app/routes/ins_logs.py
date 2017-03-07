@@ -1,7 +1,7 @@
 from app import app, db, auth
 from flask import jsonify, request, abort
 from ..resources.user import User
-from ..resources.insdosage import InsDosage
+from ..resources.ins_log import InsDosage
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/insdosages', methods=['GET'])
 @auth.login_required

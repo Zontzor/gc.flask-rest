@@ -1,7 +1,7 @@
 from app import app, db, auth
 from flask import jsonify, request, abort
 from ..resources.user import User
-from ..resources.bgreading import BGReading
+from ..resources.bg_log import BGReading
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/bgreadings', methods=['GET'])
 @auth.login_required
