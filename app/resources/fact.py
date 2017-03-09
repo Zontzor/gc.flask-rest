@@ -13,7 +13,7 @@ class Fact(db.Model):
 
     def serialize(self):
         return {
-            'pf_date' : self.pf_time_of_day,
+            'pf_date' : self.pf_date.strftime("%A, %d %b %Y"),
             'pf_time_of_day' : self.pf_time_of_day,
             'user_id' : self.user_id,
             'bg_value' : self.bg_value,
