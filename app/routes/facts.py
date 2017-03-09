@@ -25,7 +25,7 @@ def read_all_facts(user_name):
     if user is None:
         abort(404)
 
-    data = Fact.query.filter_by(user_id=user.id).all()
+    data = Fact.query.filter_by(user_id=user.id).order_by(Fact.pf_date.desc(), Fact.pf_time_of_day.desc()).all()
     data_all = []
 
     for fact in data:
