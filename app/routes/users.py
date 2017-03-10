@@ -39,7 +39,7 @@ def create_user():
     password = request.get_json()['password']
     email = request.get_json()['email']
 
-    date_created = datetime.datetime.now();
+    date_created = datetime.datetime.now()
 
     if username is None or password is None:
         abort(400) # missing arguments
