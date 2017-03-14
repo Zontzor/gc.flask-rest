@@ -64,7 +64,7 @@ def train(user_name):
 
     # Split-out validation dataset
     dataset = pd.DataFrame(data_all)
-    dataset = dataset[['pf_time_of_day', 'bg_value', 'food_value', 'exercise_value', 'ins_value']]
+    dataset = dataset[['timestamp', 'bg_value', 'carbs', 'exercise', 'insulin_dosage']]
 
     x = dataset.values[:,0:4]
     y = dataset.values[:,4]
