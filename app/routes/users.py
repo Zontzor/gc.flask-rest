@@ -4,7 +4,6 @@ from ..resources.user import User
 import datetime
 
 @app.route('/glucose_coach/api/v1.0/users/usernames/<string:user_name>', methods=['GET'])
-@auth.login_required
 def read_username(user_name):
     user = User.query.filter_by(username=user_name).first()
 
@@ -51,6 +50,8 @@ def create_user():
     user.hash_password(password)
 
     user.date_created = date_created
+
+    user.last_sync_date = '2000-01-01 00:00:00'
 
     curr_session = db.session #open database session
     try:

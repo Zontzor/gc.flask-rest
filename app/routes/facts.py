@@ -14,6 +14,9 @@ def read_fact(user_name):
 
     fact = Fact.query.filter_by(user_id=user.id).order_by(Fact.pf_date.desc(), Fact.pf_time_of_day.desc()).first()
 
+    if fact is None:
+        abort(404)
+
     return jsonify(fact.serialize())
 
 
@@ -27,6 +30,9 @@ def read_all_facts(user_name):
 
     data = Fact.query.filter_by(user_id=user.id).order_by(Fact.pf_date.desc(), Fact.pf_time_of_day.desc()).all()
     data_all = []
+
+    if data is None:
+        return 204
 
     for fact in data:
         data_all.append(fact.serialize())

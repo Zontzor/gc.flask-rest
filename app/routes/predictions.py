@@ -45,6 +45,9 @@ def predict(user_name):
 
     insulin_prediction = round(clf.predict(X)[0] * 2) / 2
 
+    if insulin_prediction < 0:
+        insulin_prediction = 0
+
     return jsonify(insulin_prediction)
 
 
