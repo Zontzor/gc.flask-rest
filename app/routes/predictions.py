@@ -1,6 +1,11 @@
-from app import app, db, auth
+"""
+    Author: Alex Kiernan
+
+    Desc: Routes that handle prediction generations and responses
+"""
+from app import app, auth
 import os.path
-from flask import Flask, request, jsonify, abort
+from flask import request, jsonify, abort
 from ..resources.user import User
 from ..resources.fact import Fact
 import numpy as np
@@ -26,6 +31,7 @@ def get_input_from_json(input_json):
     )
 
 
+# Generates a prediction for the user based on data passed
 @app.route('/glucose_coach/api/v1.0/predict/<string:user_name>', methods=['POST'])
 @auth.login_required
 def predict(user_name):
@@ -34,13 +40,16 @@ def predict(user_name):
     if user is None:
         abort(404)
 
+    # Load the users model
     model_file_name = model_directory + model_prefix + str(user.id) + model_ext
 
+    # If the user does not have a model, choose the default model
     if not os.path.exists(model_file_name):
         model_file_name = model_directory + '/default_model' + model_ext
 
     clf = joblib.load(model_file_name)
 
+    # Get the insulin prediciton
     X = get_input_from_json(request.json)
 
     insulin_prediction = round(clf.predict(X)[0] * 2) / 2
@@ -51,6 +60,7 @@ def predict(user_name):
     return jsonify(insulin_prediction)
 
 
+# Generates a users model based on the data contained in their fact table
 @app.route('/glucose_coach/api/v1.0/train/<string:user_name>', methods=['GET'])
 @auth.login_required
 def train(user_name):
@@ -59,6 +69,7 @@ def train(user_name):
     if user is None:
         abort(404)
 
+    # Get all the users facts
     data = Fact.query.filter_by(user_id=user.id).all()
     data_all = []
 
@@ -69,6 +80,7 @@ def train(user_name):
     dataset = pd.DataFrame(data_all)
     dataset = dataset[['timestamp', 'bg_value', 'carbs', 'exercise', 'insulin_dosage']]
 
+    # Choose the base and target columns
     x = dataset.values[:,0:4]
     y = dataset.values[:,4]
     validation_size = 0.20
@@ -76,11 +88,13 @@ def train(user_name):
     x_train, x_validation, y_train, y_validation = model_selection.train_test_split(x, y, test_size=validation_size,
                                                                                     random_state=seed)
 
+    # Use linear regression to generate the data
     lr = LinearRegression()
     lr.fit(x_train, y_train)
     predictions = lr.predict(x_validation)
     print(predictions)
 
+    # Store the model named with the users id
     model_file_name = model_directory + model_prefix + str(user.id) + model_ext
     joblib.dump(lr, model_file_name)
 

@@ -1,3 +1,8 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Insulin dosage model
+"""
 from app import db
 
 class InsDosage(db.Model):

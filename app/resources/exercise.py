@@ -1,3 +1,8 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Exercise model
+"""
 from app import db
 
 

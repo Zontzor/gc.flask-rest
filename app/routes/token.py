@@ -1,5 +1,11 @@
-from app import app, db, auth
+"""
+    Author: Alex Kiernan
+
+    Desc: Get a token
+"""
+from app import app, auth
 from flask import jsonify, g
+
 
 @app.route('/glucose_coach/api/v1.0/token')
 @auth.login_required

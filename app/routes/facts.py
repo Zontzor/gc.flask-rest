@@ -1,5 +1,10 @@
-from app import app, db, auth
-from flask import jsonify, request, abort
+"""
+    Author: Alex Kiernan
+
+    Desc: Facts routes
+"""
+from app import app, auth
+from flask import jsonify, abort
 from ..resources.user import User
 from ..resources.fact import Fact
 

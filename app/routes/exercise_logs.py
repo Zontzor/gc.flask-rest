@@ -1,7 +1,13 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Exercise logs routes
+"""
 from app import app, db, auth
 from flask import jsonify, request, abort
 from ..resources.user import User
 from ..resources.exercise_log import ExerciseLog
+
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/exerciselogs', methods=['GET'])
 @auth.login_required
@@ -50,10 +56,10 @@ def create_el(user_name):
     exercise_log = ExerciseLog(user_id=user.id, exercise_id=exercise_id, el_duration=el_duration,
                                el_timestamp=el_timestamp)
 
-    curr_session = db.session  # open database session
+    curr_session = db.session
     try:
-        curr_session.add(exercise_log)  # add prepared statment to opened session
-        curr_session.commit()  # commit changes
+        curr_session.add(exercise_log)
+        curr_session.commit()
     except:
         curr_session.rollback()
         curr_session.flush()

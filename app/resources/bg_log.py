@@ -1,4 +1,10 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: BG log model
+"""
 from app import db
+
 
 class BGReading(db.Model):
     __tablename__ = 'bg_logs'

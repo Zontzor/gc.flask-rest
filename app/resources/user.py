@@ -1,7 +1,13 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Authenticates user using either a token or username/password
+"""
 from app import app, db
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
+
 
 class User(db.Model):
     __tablename__ = 'users'

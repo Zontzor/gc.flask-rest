@@ -1,3 +1,8 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Fact model
+"""
 from app import db
 
 

@@ -1,6 +1,12 @@
-from app import app, db, auth
-from flask import jsonify, request, abort
+"""
+    Author: Alex Kiernan
+
+    Desc: Foods routes
+"""
+from app import app, auth
+from flask import jsonify
 from ..resources.food import Food
+
 
 @app.route('/glucose_coach/api/v1.0/foods', methods=['GET'])
 @auth.login_required

@@ -1,3 +1,8 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Food log model
+"""
 from app import db
 
 

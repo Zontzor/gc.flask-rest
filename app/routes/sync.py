@@ -1,3 +1,8 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Last sync date routes
+"""
 from app import app, db, auth
 from flask import jsonify, request, abort
 from ..resources.user import User

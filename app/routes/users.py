@@ -1,7 +1,13 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Users routes
+"""
 from app import app, db, auth
 from flask import jsonify, request, abort
 from ..resources.user import User
 import datetime
+
 
 @app.route('/glucose_coach/api/v1.0/users/usernames/<string:user_name>', methods=['GET'])
 def read_username(user_name):
@@ -12,15 +18,17 @@ def read_username(user_name):
 
     return jsonify(user.username)
 
+
 @app.route('/glucose_coach/api/v1.0/users', methods=['GET'])
 @auth.login_required
 def read_users():
-    data = User.query.all() # fetch all users on the table
+    data = User.query.all()  # Fetch all users on the table
     data_all = []
     for user in data:
-        data_all.append(user.serialize()) # prepare visual data
+        data_all.append(user.serialize())  # Prepare visual data
 
     return jsonify(users=data_all)
+
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', methods=['GET'])
 @auth.login_required
@@ -32,6 +40,7 @@ def read_user(user_name):
 
     return jsonify(user.serialize())
 
+
 @app.route('/glucose_coach/api/v1.0/users', methods=['POST'])
 def create_user():
     username = request.get_json()['username']
@@ -41,9 +50,9 @@ def create_user():
     date_created = datetime.datetime.now()
 
     if username is None or password is None:
-        abort(400) # missing arguments
+        abort(400)  # Missing arguments
     if User.query.filter_by(username = username).first() is not None:
-        abort(400) # existing user
+        abort(400)  # Existing user
 
     user = User(username = username, email = email)
 
@@ -53,16 +62,17 @@ def create_user():
 
     user.last_sync_date = '2000-01-01 00:00:00'
 
-    curr_session = db.session #open database session
+    curr_session = db.session
     try:
-        curr_session.add(user) #add prepared statment to opened session
-        curr_session.commit() #commit changes
+        curr_session.add(user)
+        curr_session.commit()
     except:
         curr_session.rollback()
         curr_session.flush()
         abort(400)
 
     return jsonify(user.serialize())
+
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>', methods=['PUT'])
 @auth.login_required

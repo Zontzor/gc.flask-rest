@@ -1,7 +1,13 @@
+"""
+    Author: Alex Kiernan
+
+    Desc: Food logs routes
+"""
 from app import app, db, auth
 from flask import jsonify, request, abort
 from ..resources.user import User
 from ..resources.food_log import FoodLog
+
 
 @app.route('/glucose_coach/api/v1.0/users/<string:user_name>/foodlogs', methods=['GET'])
 @auth.login_required
@@ -49,10 +55,10 @@ def create_food_log(user_name):
 
     food_log = FoodLog(user_id=user.id, food_id=food_id, fl_quantity=fl_quantity, fl_timestamp=fl_timestamp)
 
-    curr_session = db.session  # open database session
+    curr_session = db.session
     try:
-        curr_session.add(food_log)  # add prepared statment to opened session
-        curr_session.commit()  # commit changes
+        curr_session.add(food_log)
+        curr_session.commit()
     except:
         curr_session.rollback()
         curr_session.flush()
