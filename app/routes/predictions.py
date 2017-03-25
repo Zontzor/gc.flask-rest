@@ -69,12 +69,12 @@ def train(user_name):
     if user is None:
         abort(404)
 
-    # Get all the users facts
-    data = Fact.query.filter_by(user_id=user.id).filter(Fact.bg_value != 0).all()
+    # Get all the users facts that offer good data for training
+    data = Fact.query.filter_by(user_id=user.id).filter(Fact.bg_value != 0, Fact.ins_value != 0, Fact.food_value != 0).all()
 
     if len(data) < 20:
         abort(404)
-        
+
     data_all = []
 
     for prediction_fact in data:
